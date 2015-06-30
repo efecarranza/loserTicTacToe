@@ -2,6 +2,8 @@
 
 import random
 
+moves = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
 def drawBoard(board):
     print('   |   |')
     print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
@@ -19,7 +21,8 @@ def inputPlayerLetter():
     letter = ''
     while not (letter == 'X' or letter == 'O'):
         print('Do you want to be X or O?')
-        letter = raw_input().upper()    if letter == 'X':
+        letter = raw_input().upper()
+    if letter == 'X':
         return ['X', 'O']
     else:
         return ['O', 'X']
@@ -76,8 +79,8 @@ def chooseRandomMoveFromList(board, movesList):
     else:
         return None
 
-def getComputerMove(board, computerLetter):
-    moves = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+def getComputerMove(board, computerLetter, moves):
+    movesCopy = list(moves)
     if computerLetter == 'X':
         playerLetter = 'O'
     else:
@@ -88,17 +91,17 @@ def getComputerMove(board, computerLetter):
         if isSpaceFree(copy, i):
             makeMove(copy, computerLetter, i)
             if isWinner(copy, computerLetter):
-                moves.remove(i)
+                movesCopy.remove(i)
 
     for i in range(1, 10):
         copy = getBoardCopy(board)
         if isSpaceFree(copy, i):
             makeMove(copy, playerLetter, i)
             if isWinner(copy, playerLetter):
-                moves.remove(i)
+                movesCopy.remove(i)
 
-    move = chooseRandomMoveFromList(board, moves)
-
+    move = chooseRandomMoveFromList(board, movesCopy)
+    print movesCopy, '->',moves
     return move
 
 def isBoardFull(board):
@@ -136,7 +139,7 @@ while True:
                     turn = 'computer'
 
         else:
-            move = getComputerMove(theBoard, computerLetter)
+            move = getComputerMove(theBoard, computerLetter, moves)
             makeMove(theBoard, computerLetter, move)
 
             if isWinner(theBoard, computerLetter):
